@@ -1,33 +1,35 @@
 #!/usr/bin/python
+# coding:utf-8
 import random
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
-ROTATE_RATE=0.25
-SELFROTATE_RATE=1.0
+ROTATE_RATE = 0.25
+SELFROTATE_RATE = 1.0
+
+a1 = a2 = 0
+
 
 def init():
-    # global a1
-    # global a2
-    # a1=a2=0
-    light0_diffuse=[1.0,0.5,0.0,1.0]#light0中漫反射光分量
-    light0_position=[10.0,20.0,-150.0,1.0]#light0的坐标位置
-    light0_direction=[0.0,0.0,-1.0]#light0的聚光灯方向角
-    glLightfv(GL_LIGHT0,GL_DIFFUSE,light0_diffuse)#light0在太阳中心
-    glLightfv(GL_LIGHT0,GL_POSITION,light0_position)
-    glLightfv(GL_LIGHT0,GL_SPOT_DIRECTION,light0_direction)
-    glEnable(GL_DEPTH_TEST)# 启用深度测试
-    glEnable(GL_LIGHTING)# 启用光源
+    light0_diffuse = [1.0, 0.5, 0.0, 1.0]  # light0中漫反射光分量
+    light0_position = [10.0, 20.0, -150.0, 1.0]  # light0的坐标位置
+    light0_direction = [0.0, 0.0, -1.0]  # light0的聚光灯方向角
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse)  # light0在太阳中心
+    glLightfv(GL_LIGHT0, GL_POSITION, light0_position)
+    glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, light0_direction)
+    glEnable(GL_DEPTH_TEST)  # 启用深度测试
+    glEnable(GL_LIGHTING)  # 启用光源
     glEnable(GL_LIGHT0)
-    glEnable(GL_COLOR_MATERIAL)#启用颜色材质模式
-    glFrontFace(GL_CCW)# 指定逆时针绕法表示多边形正面
-    glClearColor(0.75, 0.75,0.75, 1.0)#背景
+    glEnable(GL_COLOR_MATERIAL)  # 启用颜色材质模式
+    glFrontFace(GL_CCW)  # 指定逆时针绕法表示多边形正面
+    glClearColor(0.75, 0.75, 0.75, 1.0)  # 背景
 
-def display():
-     angle1=random.randint(0,100)
-     angle2=random.randint(0,100)
-     #angle1地球绕太阳旋转的角度，angle2月亮绕地球旋转的角度
+
+def display(a1,a2):
+     angle1=a1
+     angle2=a2
+     # angle1地球绕太阳旋转的角度，angle2月亮绕地球旋转的角度
      sun_emission=[0.6,0.0,0.0,1.0]#太阳颜色
      earth_emission=[0.0,0.0,0.8,1.0]#地球颜色
      moon_emission=[0.98,0.625,0.12,1.0]#月亮颜色
@@ -38,20 +40,20 @@ def display():
      glMatrixMode(GL_MODELVIEW)#指定当前操作模型视图矩阵堆栈
      glLoadIdentity()#重置模型视图矩阵
      glTranslatef(0.0,0.0,-150.0)#将图形沿z轴负向移动150.0
-     #绘制太阳
+     # 绘制太阳
      glEnable(GL_LIGHT1)#callFPS()     glLightfv(GL_LIGHT1,GL_DIFFUSE,light1_diffuse)
      glLightfv(GL_LIGHT1,GL_POSITION,light1_position)
      glLightfv(GL_LIGHT1,GL_SPOT_DIRECTION,light1_direction)
      glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,sun_emission)
      glutSolidSphere(12.0,30,30)#绘制太阳
      glDisable(GL_LIGHT1)
-     #绘制地球
+     # 绘制地球
      glPushMatrix()#保存当前的矩阵视图模型
      glRotatef(angle1,0.0,10.0,1.0)#旋转一定角度
      glTranslatef(40.0,0.0,0.0)#绕x轴正向移动40.0
      glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,earth_emission)
      glutSolidSphere(6.0,20,20)#绘制地球
-     #绘制月亮
+     # 绘制月亮
      glRotatef(angle2,0.0,1.0,0.0)
      glTranslatef(15.0,0.0,0.0)#绕x轴方向移动15.0
      glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,moon_emission)
@@ -64,6 +66,10 @@ def display():
      if angle2>=360.0:
                angle2-=360.0
      glutSwapBuffers()
+ # 	 global a1
+ # 	 global a2
+	 a1=angle1
+	 a2=angle2
 
 def ChangeSize(w, h):
     if h==0:

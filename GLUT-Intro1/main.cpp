@@ -111,7 +111,7 @@ void Display(void)
 
 {
 
-         static float angle1=0.0f,angle2=0.0f;
+         float angle1=0.0f,angle2=0.0f;
 
          //angle1地球绕太阳旋转的角度，angle2月亮绕地球旋转的角度
 
