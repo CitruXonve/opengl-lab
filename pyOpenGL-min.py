@@ -15,7 +15,7 @@ def main():
     glutInit(sys.argv)
     glutInitWindowSize(512, 512)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH)
-    glutCreateWindow("The glut hello world program")
+    glutCreateWindow(b"The glut hello world program")
     glClearColor(0.1, 0.555555, 1.0)
     glutDisplayFunc(display)
     glutIdleFunc(update)
