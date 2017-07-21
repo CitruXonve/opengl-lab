@@ -1,0 +1,11 @@
+{
+"cmd": ["g++", "${file}", "-o","${file_path}/${file_base_name}","-lfreeglut","-lopengl32","-lglu32","-Wl,--subsystem,windows"],
+"working_dir": "${file_path}",
+"variants":
+[
+{
+"name": "Run",
+"cmd": ["cmd","/C","${file_path}/${file_base_name}.exe &pause"]
+}
+]
+}
