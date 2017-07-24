@@ -14,7 +14,9 @@
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
+
 #include <GL/glut.h>
+
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -51,27 +53,27 @@
 
 
 // Planet's color. 
-const GLfloat planetColor[] = { 0.9, 0.6, 0.4 };
+const GLfloat planetColor[] = {0.9, 0.6, 0.4};
 
 // Car tyre color. 
-const GLfloat tyreColor[] = { 0.2, 0.2, 0.2 };
+const GLfloat tyreColor[] = {0.2, 0.2, 0.2};
 
 // Material properties for all objects.
-const GLfloat materialSpecular[] = { 1.0, 1.0, 1.0, 1.0 };
-const GLfloat materialShininess[] = { 100.0 };
-const GLfloat materialEmission[] = { 0.0, 0.0, 0.0, 1.0 };
+const GLfloat materialSpecular[] = {1.0, 1.0, 1.0, 1.0};
+const GLfloat materialShininess[] = {100.0};
+const GLfloat materialEmission[] = {0.0, 0.0, 0.0, 1.0};
 
 // Light 0.
-const GLfloat light0Ambient[] = { 0.1, 0.1, 0.1, 1.0 };
-const GLfloat light0Diffuse[] = { 0.7, 0.7, 0.7, 1.0 };
-const GLfloat light0Specular[] = { 0.9, 0.9, 0.9, 1.0 };
-const GLfloat light0Position[] = { 1.0, 1.0, 1.0, 0.0 };
+const GLfloat light0Ambient[] = {0.1, 0.1, 0.1, 1.0};
+const GLfloat light0Diffuse[] = {0.7, 0.7, 0.7, 1.0};
+const GLfloat light0Specular[] = {0.9, 0.9, 0.9, 1.0};
+const GLfloat light0Position[] = {1.0, 1.0, 1.0, 0.0};
 
 // Light 1.
-const GLfloat light1Ambient[] = { 0.1, 0.1, 0.1, 1.0 };
-const GLfloat light1Diffuse[] = { 0.7, 0.7, 0.7, 1.0 };
-const GLfloat light1Specular[] = { 0.9, 0.9, 0.9, 1.0 };
-const GLfloat light1Position[] = { -1.0, 0.0, -0.5, 0.0 };
+const GLfloat light1Ambient[] = {0.1, 0.1, 0.1, 1.0};
+const GLfloat light1Diffuse[] = {0.7, 0.7, 0.7, 1.0};
+const GLfloat light1Specular[] = {0.9, 0.9, 0.9, 1.0};
+const GLfloat light1Position[] = {-1.0, 0.0, -0.5, 0.0};
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -88,7 +90,7 @@ typedef struct CarType {
     double rotAngle;    // Rotation angle about the xzAxis[].
 } CarType;
 
-CarType car[ NUM_CARS ];    // Array of cars.
+CarType car[NUM_CARS];    // Array of cars.
 
 
 // Define eye position.
@@ -103,8 +105,8 @@ double eyeDistance = EYE_INIT_DIST;
 // Window's size.
 int winWidth = 800;     // Window width in pixels.
 int winHeight = 600;    // Window height in pixels.
-float deg2rad(float deg){
-    return deg*PI/180.0f;
+float deg2rad(float deg) {
+    return deg * PI / 180.0f;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -114,13 +116,12 @@ bool pauseAnimation = false;    // Freeze the cars iff true.
 bool drawAxes = true;           // Draw world coordinate frame axes iff true.
 bool drawWireframe = false;     // Draw polygons in wireframe if true, otherwise polygons are filled.
 
-double deg2rad(double deg){
-    return deg*PI/180.0;
+double deg2rad(double deg) {
+    return deg * PI / 180.0;
 }
 
 // Calculate the current frame rate
-double CalcFPS()
-{
+double CalcFPS() {
     static int count;
     static double save;
     static clock_t last, current;
@@ -131,7 +132,7 @@ double CalcFPS()
     count = 0;
     last = current;
     current = clock();
-    timegap = (current - last) / (double)CLK_TCK;
+    timegap = (current - last) / (double) CLK_TCK;
     save = 50.0 / timegap;
     return save;
 }
@@ -152,9 +153,8 @@ void displayFPS() {
 // The car has size CAR_LENGTH x CAR_WIDTH x CAR_HEIGHT.
 /////////////////////////////////////////////////////////////////////////////
 
-void DrawOneCar( float bodyColor[3] )
-{
-    glColor3fv( bodyColor );
+void DrawOneCar(float bodyColor[3]) {
+    glColor3fv(bodyColor);
 
     //===========================
     // WRITE YOUR CODE HERE.
@@ -162,18 +162,18 @@ void DrawOneCar( float bodyColor[3] )
     // Draw the car body.
     //===========================
     glPushMatrix();
-    glTranslatef(0,0,CAR_HEIGHT/2);
-    glScalef(CAR_LENGTH*0.6,CAR_WIDTH,CAR_HEIGHT/2);
+    glTranslatef(0, 0, CAR_HEIGHT / 2);
+    glScalef(CAR_LENGTH * 0.6, CAR_WIDTH, CAR_HEIGHT / 2);
     glutSolidCube(1.0);
     glPopMatrix();
 
     glPushMatrix();
-    glTranslatef(0,0,0);
-    glScalef(CAR_LENGTH,CAR_WIDTH,CAR_HEIGHT/2);
+    glTranslatef(0, 0, 0);
+    glScalef(CAR_LENGTH, CAR_WIDTH, CAR_HEIGHT / 2);
     glutSolidCube(1.0);
     glPopMatrix();
 
-    glColor3fv( tyreColor );
+    glColor3fv(tyreColor);
 
     //===========================
     // WRITE YOUR CODE HERE.
@@ -182,30 +182,30 @@ void DrawOneCar( float bodyColor[3] )
     //===========================
 
     glPushMatrix();
-    glTranslatef(CAR_LENGTH/4,CAR_WIDTH/2+2,0);
-    glRotatef(90,1,0,0);
-    glutSolidTorus(CAR_HEIGHT/8,CAR_HEIGHT/4,16,16);
+    glTranslatef(CAR_LENGTH / 4, CAR_WIDTH / 2 + 2, 0);
+    glRotatef(90, 1, 0, 0);
+    glutSolidTorus(CAR_HEIGHT / 8, CAR_HEIGHT / 4, 16, 16);
     glPopMatrix();
 
 
     glPushMatrix();
-    glTranslatef(-CAR_LENGTH/4,CAR_WIDTH/2+2,0);
-    glRotatef(90,1,0,0);
-    glutSolidTorus(CAR_HEIGHT/8,CAR_HEIGHT/4,16,16);
+    glTranslatef(-CAR_LENGTH / 4, CAR_WIDTH / 2 + 2, 0);
+    glRotatef(90, 1, 0, 0);
+    glutSolidTorus(CAR_HEIGHT / 8, CAR_HEIGHT / 4, 16, 16);
     glPopMatrix();
 
 
     glPushMatrix();
-    glTranslatef(CAR_LENGTH/4,-CAR_WIDTH/2-2,0);
-    glRotatef(90,1,0,0);
-    glutSolidTorus(CAR_HEIGHT/8,CAR_HEIGHT/4,16,16);
+    glTranslatef(CAR_LENGTH / 4, -CAR_WIDTH / 2 - 2, 0);
+    glRotatef(90, 1, 0, 0);
+    glutSolidTorus(CAR_HEIGHT / 8, CAR_HEIGHT / 4, 16, 16);
     glPopMatrix();
 
 
     glPushMatrix();
-    glTranslatef(-CAR_LENGTH/4,-CAR_WIDTH/2-2,0);
-    glRotatef(90,1,0,0);
-    glutSolidTorus(CAR_HEIGHT/8,CAR_HEIGHT/4,16,16);
+    glTranslatef(-CAR_LENGTH / 4, -CAR_WIDTH / 2 - 2, 0);
+    glRotatef(90, 1, 0, 0);
+    glutSolidTorus(CAR_HEIGHT / 8, CAR_HEIGHT / 4, 16, 16);
     glPopMatrix();
 }
 
@@ -215,18 +215,16 @@ void DrawOneCar( float bodyColor[3] )
 // Draw all the cars. Each is put correctly on its great circle.
 /////////////////////////////////////////////////////////////////////////////
 
-void DrawAllCars( void )
-{
-    for ( int i = 0; i < NUM_CARS; i++ )
-    {
+void DrawAllCars(void) {
+    for (int i = 0; i < NUM_CARS; i++) {
         //===========================
         // WRITE YOUR CODE HERE.
         //===========================
-        CarType &thisCar=car[i];
-        double x=thisCar.xzAxis[0];
-        double z=thisCar.xzAxis[1];
-        double theta=thisCar.rotAngle;
-        double norm=sqrt(x*x+z*z);
+        CarType &thisCar = car[i];
+        double x = thisCar.xzAxis[0];
+        double z = thisCar.xzAxis[1];
+        double theta = thisCar.rotAngle;
+        double norm = sqrt(x * x + z * z);
 //        x/=norm;z?/=norm;
         glPushMatrix();
 //        glRotatef(thisCar.angularPos,
@@ -234,9 +232,9 @@ void DrawAllCars( void )
 //                  cos(deg2rad(theta)),
 //                  sin(deg2rad(theta))*x
 //                  );
-        glRotatef(theta,x,0,z);
-        glRotatef(thisCar.angularPos,0,1,0);
-        glTranslatef(0, 0, PLANET_RADIUS+5);
+        glRotatef(theta, x, 0, z);
+        glRotatef(thisCar.angularPos, 0, 1, 0);
+        glTranslatef(0, 0, PLANET_RADIUS + 5);
         DrawOneCar(thisCar.bodyColor);
         glPopMatrix();
     }
@@ -250,24 +248,23 @@ void DrawAllCars( void )
 // The x-axis is red, y-axis green, and z-axis blue.
 /////////////////////////////////////////////////////////////////////////////
 
-void DrawAxes( double length )
-{
-    glPushAttrib( GL_ALL_ATTRIB_BITS );
-    glDisable( GL_LIGHTING );
-    glLineWidth( 3.0 );
-    glBegin( GL_LINES );
+void DrawAxes(double length) {
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glDisable(GL_LIGHTING);
+    glLineWidth(3.0);
+    glBegin(GL_LINES);
     // x-axis.
-    glColor3f( 1.0, 0.0, 0.0 );
-    glVertex3d( 0.0, 0.0, 0.0 );
-    glVertex3d( length, 0.0, 0.0 );
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex3d(0.0, 0.0, 0.0);
+    glVertex3d(length, 0.0, 0.0);
     // y-axis.
-    glColor3f( 0.0, 1.0, 0.0 );
-    glVertex3d( 0.0, 0.0, 0.0 );
-    glVertex3d( 0.0, length, 0.0 );
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex3d(0.0, 0.0, 0.0);
+    glVertex3d(0.0, length, 0.0);
     // z-axis.
-    glColor3f( 0.0, 0.0, 1.0 );
-    glVertex3d( 0.0, 0.0, 0.0 );
-    glVertex3d( 0.0, 0.0, length );
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex3d(0.0, 0.0, 0.0);
+    glVertex3d(0.0, 0.0, length);
     glEnd();
     glPopAttrib();
 }
@@ -278,11 +275,10 @@ void DrawAxes( double length )
 // The display callback function.
 /////////////////////////////////////////////////////////////////////////////
 
-void MyDisplay( void )
-{
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+void MyDisplay(void) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glMatrixMode( GL_PROJECTION );
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     //=======================================================================
     // WRITE YOUR CODE HERE.
@@ -295,10 +291,11 @@ void MyDisplay( void )
     // the predefined constant CLIP_PLANE_DIST to position your near and 
     // far planes.
     //=======================================================================
-    gluPerspective( 45.0, (double)winWidth/winHeight, 50.0, 600.0 );
+    gluPerspective(45.0, (double) winWidth / winHeight, abs(eyeDistance - CLIP_PLANE_DIST),
+                   eyeDistance + CLIP_PLANE_DIST);
 
 
-    glMatrixMode( GL_MODELVIEW );
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     //=======================================================================
     // WRITE YOUR CODE HERE.
@@ -307,21 +304,21 @@ void MyDisplay( void )
     // You may use the gluLookAt() function, but you can use other method.
     //=======================================================================
 //    gluLookAt( 0.0, 0.0, eyeDistance, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0 );
-    gluLookAt( eyeDistance*sin(deg2rad(eyeLongitude))*cos(deg2rad(eyeLatitude)),
-               eyeDistance*sin(deg2rad(eyeLatitude)),
-               eyeDistance*cos(deg2rad(eyeLongitude))*cos(deg2rad(eyeLatitude)),
-               0.0, 0.0, 0.0, 0.0, 1.0, 0.0 );
+    gluLookAt(eyeDistance * sin(deg2rad(eyeLongitude)) * cos(deg2rad(eyeLatitude)),
+              eyeDistance * sin(deg2rad(eyeLatitude)),
+              eyeDistance * cos(deg2rad(eyeLongitude)) * cos(deg2rad(eyeLatitude)),
+              0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
 
     // Set world positions of the two lights.
-    glLightfv( GL_LIGHT0, GL_POSITION, light0Position);
-    glLightfv( GL_LIGHT1, GL_POSITION, light1Position);
+    glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
+    glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
 
     // Draw axes.
-    if ( drawAxes ) DrawAxes( 2 * PLANET_RADIUS );
+    if (drawAxes) DrawAxes(2 * PLANET_RADIUS);
 
     // Draw planet.
-    glColor3fv( planetColor );
-    glutSolidSphere( PLANET_RADIUS, 72, 36 );
+    glColor3fv(planetColor);
+    glutSolidSphere(PLANET_RADIUS, 72, 36);
 
     // Draw the cars.
     DrawAllCars();
@@ -336,12 +333,10 @@ void MyDisplay( void )
 // the angle increment.
 /////////////////////////////////////////////////////////////////////////////
 
-void UpdateCars( void )
-{
-    for ( int i = 0; i < NUM_CARS; i++ )
-    {
+void UpdateCars(void) {
+    for (int i = 0; i < NUM_CARS; i++) {
         car[i].angularPos += car[i].angleIncr;
-        if ( car[i].angularPos > 360.0 ) car[i].angularPos -= 360.0;
+        if (car[i].angularPos > 360.0) car[i].angularPos -= 360.0;
     }
     glutPostRedisplay();
 }
@@ -353,24 +348,22 @@ void UpdateCars( void )
 // increment (speed), a random anglular position, and a random great circle.
 /////////////////////////////////////////////////////////////////////////////
 
-void InitCars( void )
-{
-    for ( int i = 0; i < NUM_CARS; i++ )
-    {
-        car[i].bodyColor[0] = (float)rand() / RAND_MAX;  // 0.0 to 1.0.
-        car[i].bodyColor[1] = (float)rand() / RAND_MAX;  // 0.0 to 1.0.
-        car[i].bodyColor[2] = (float)rand() / RAND_MAX;  // 0.0 to 1.0.
+void InitCars(void) {
+    for (int i = 0; i < NUM_CARS; i++) {
+        car[i].bodyColor[0] = (float) rand() / RAND_MAX;  // 0.0 to 1.0.
+        car[i].bodyColor[1] = (float) rand() / RAND_MAX;  // 0.0 to 1.0.
+        car[i].bodyColor[2] = (float) rand() / RAND_MAX;  // 0.0 to 1.0.
 
-        car[i].angleIncr = (double)rand() / RAND_MAX *
-                           ( CAR_MAX_ANGLE_INCR - CAR_MIN_ANGLE_INCR ) + CAR_MIN_ANGLE_INCR;
+        car[i].angleIncr = (double) rand() / RAND_MAX *
+                           (CAR_MAX_ANGLE_INCR - CAR_MIN_ANGLE_INCR) + CAR_MIN_ANGLE_INCR;
         // CAR_MIN_ANGLE_INCR to CAR_MAX_ANGLE_INCR.
 
-        car[i].angularPos = (double)rand() / RAND_MAX * 360.0;      // 0.0 to 360.0.
+        car[i].angularPos = (double) rand() / RAND_MAX * 360.0;      // 0.0 to 360.0.
 
         // The following 3 items defines a random great circle.
-        car[i].xzAxis[0] = (double)rand() / RAND_MAX * 2.0 - 1.0;   // -1.0 to 1.0.
-        car[i].xzAxis[1] = (double)rand() / RAND_MAX * 2.0 - 1.0;   // -1.0 to 1.0.
-        car[i].rotAngle = (double)rand() / RAND_MAX * 360.0;        // 0.0 to 360.0.
+        car[i].xzAxis[0] = (double) rand() / RAND_MAX * 2.0 - 1.0;   // -1.0 to 1.0.
+        car[i].xzAxis[1] = (double) rand() / RAND_MAX * 2.0 - 1.0;   // -1.0 to 1.0.
+        car[i].rotAngle = (double) rand() / RAND_MAX * 360.0;        // 0.0 to 360.0.
     }
 }
 
@@ -380,13 +373,11 @@ void InitCars( void )
 // The timer callback function.
 /////////////////////////////////////////////////////////////////////////////
 
-void MyTimer( int v )
-{
+void MyTimer(int v) {
     displayFPS();
-    if ( !pauseAnimation )
-    {
+    if (!pauseAnimation) {
         UpdateCars();
-        glutTimerFunc( 1000 / DESIRED_FPS, MyTimer, v );
+        glutTimerFunc(1000 / DESIRED_FPS, MyTimer, v);
     }
 }
 
@@ -396,10 +387,8 @@ void MyTimer( int v )
 // The keyboard callback function.
 /////////////////////////////////////////////////////////////////////////////
 
-void MyKeyboard( unsigned char key, int x, int y )
-{
-    switch ( key )
-    {
+void MyKeyboard(unsigned char key, int x, int y) {
+    switch (key) {
         // Quit program.
         case 'q':
         case 'Q':
@@ -410,10 +399,10 @@ void MyKeyboard( unsigned char key, int x, int y )
         case 'w':
         case 'W':
             drawWireframe = !drawWireframe;
-            if ( drawWireframe )
-                glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+            if (drawWireframe)
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             else
-                glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glutPostRedisplay();
             break;
 
@@ -428,7 +417,7 @@ void MyKeyboard( unsigned char key, int x, int y )
         case 'p':
         case 'P':
             pauseAnimation = !pauseAnimation;
-            if ( !pauseAnimation ) glutTimerFunc( 0, MyTimer, 0 );
+            if (!pauseAnimation) glutTimerFunc(0, MyTimer, 0);
             break;
 
             // Reset to initial view.
@@ -449,37 +438,35 @@ void MyKeyboard( unsigned char key, int x, int y )
 // The special key callback function.
 /////////////////////////////////////////////////////////////////////////////
 
-void MySpecialKey( int key, int x, int y )
-{
-    switch ( key )
-    {
+void MySpecialKey(int key, int x, int y) {
+    switch (key) {
         case GLUT_KEY_LEFT:
             eyeLongitude -= EYE_LONGITUDE_INCR;
-            if ( eyeLongitude < -360.0 ) eyeLongitude += 360.0 ;
+            if (eyeLongitude < -360.0) eyeLongitude += 360.0;
             glutPostRedisplay();
             break;
 
         case GLUT_KEY_RIGHT:
             eyeLongitude += EYE_LONGITUDE_INCR;
-            if ( eyeLongitude > 360.0 ) eyeLongitude -= 360.0 ;
+            if (eyeLongitude > 360.0) eyeLongitude -= 360.0;
             glutPostRedisplay();
             break;
 
         case GLUT_KEY_DOWN:
             eyeLatitude -= EYE_LATITUDE_INCR;
-            if ( eyeLatitude < EYE_MIN_LATITUDE ) eyeLatitude = EYE_MIN_LATITUDE;
+            if (eyeLatitude < EYE_MIN_LATITUDE) eyeLatitude = EYE_MIN_LATITUDE;
             glutPostRedisplay();
             break;
 
         case GLUT_KEY_UP:
             eyeLatitude += EYE_LATITUDE_INCR;
-            if ( eyeLatitude > EYE_MAX_LATITUDE ) eyeLatitude = EYE_MAX_LATITUDE;
+            if (eyeLatitude > EYE_MAX_LATITUDE) eyeLatitude = EYE_MAX_LATITUDE;
             glutPostRedisplay();
             break;
 
         case GLUT_KEY_PAGE_UP:
             eyeDistance -= EYE_DIST_INCR;
-            if ( eyeDistance < EYE_MIN_DIST ) eyeDistance = EYE_MIN_DIST;
+            if (eyeDistance < EYE_MIN_DIST) eyeDistance = EYE_MIN_DIST;
             glutPostRedisplay();
             break;
 
@@ -496,11 +483,10 @@ void MySpecialKey( int key, int x, int y )
 // The reshape callback function.
 /////////////////////////////////////////////////////////////////////////////
 
-void MyReshape( int w, int h )
-{
+void MyReshape(int w, int h) {
     winWidth = w;
     winHeight = h;
-    glViewport( 0, 0, w, h );
+    glViewport(0, 0, w, h);
 }
 
 
@@ -509,11 +495,10 @@ void MyReshape( int w, int h )
 // The init function. It initializes some OpenGL states.
 /////////////////////////////////////////////////////////////////////////////
 
-void MyInit( void )
-{
-    glClearColor( 0.0, 0.0, 0.0, 1.0 ); // Set black background color.
-    glEnable( GL_DEPTH_TEST ); // Use depth-buffer for hidden surface removal.
-    glShadeModel( GL_SMOOTH );
+void MyInit(void) {
+    glClearColor(0.0, 0.0, 0.0, 1.0); // Set black background color.
+    glEnable(GL_DEPTH_TEST); // Use depth-buffer for hidden surface removal.
+    glShadeModel(GL_SMOOTH);
 
     //=======================================================================
     // The rest of the code below sets up the lighting and 
@@ -522,34 +507,34 @@ void MyInit( void )
     //=======================================================================
 
     // Set Light 0.
-    glLightfv( GL_LIGHT0, GL_AMBIENT, light0Ambient );
-    glLightfv( GL_LIGHT0, GL_DIFFUSE, light0Diffuse );
-    glLightfv( GL_LIGHT0, GL_SPECULAR, light0Specular );
-    glEnable( GL_LIGHT0 );
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light0Ambient);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light0Diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, light0Specular);
+    glEnable(GL_LIGHT0);
 
     // Set Light 1.
-    glLightfv( GL_LIGHT1, GL_AMBIENT, light1Ambient );
-    glLightfv( GL_LIGHT1, GL_DIFFUSE, light1Diffuse );
-    glLightfv( GL_LIGHT1, GL_SPECULAR, light1Specular );
-    glEnable( GL_LIGHT1 );
+    glLightfv(GL_LIGHT1, GL_AMBIENT, light1Ambient);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, light1Diffuse);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, light1Specular);
+    glEnable(GL_LIGHT1);
 
-    glEnable( GL_LIGHTING );
+    glEnable(GL_LIGHTING);
 
     // Set some global light properties.
-    GLfloat globalAmbient[] = { 0.1, 0.1, 0.1, 1.0 };
-    glLightModelfv( GL_LIGHT_MODEL_AMBIENT, globalAmbient );
-    glLightModeli( GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE );
-    glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE );
+    GLfloat globalAmbient[] = {0.1, 0.1, 0.1, 1.0};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbient);
+    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 
     // Set the universal material properties.
     // The diffuse and ambient components can be changed using glColor*().
-    glMaterialfv( GL_FRONT, GL_SPECULAR, materialSpecular );
-    glMaterialfv( GL_FRONT, GL_SHININESS, materialShininess );
-    glMaterialfv( GL_FRONT, GL_EMISSION, materialEmission );
-    glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
-    glEnable( GL_COLOR_MATERIAL );
+    glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpecular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, materialShininess);
+    glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    glEnable(GL_COLOR_MATERIAL);
 
-    glEnable( GL_NORMALIZE ); // Let OpenGL automatically renomarlize all normal vectors.
+    glEnable(GL_NORMALIZE); // Let OpenGL automatically renomarlize all normal vectors.
 }
 
 
@@ -558,35 +543,34 @@ void MyInit( void )
 // The main function.
 /////////////////////////////////////////////////////////////////////////////
 
-int main( int argc, char** argv )
-{
-    glutInit( &argc, argv );
-    glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
-    glutInitWindowSize( winWidth, winHeight );
-    glutCreateWindow( "assign2" );
+int main(int argc, char **argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitWindowSize(winWidth, winHeight);
+    glutCreateWindow("assign2");
 
     MyInit();
     InitCars();
 
     // Register the callback functions.
-    glutDisplayFunc( MyDisplay );
-    glutReshapeFunc( MyReshape );
-    glutKeyboardFunc( MyKeyboard );
-    glutSpecialFunc( MySpecialKey );
-    glutTimerFunc( 100, MyTimer, 0 );
+    glutDisplayFunc(MyDisplay);
+    glutReshapeFunc(MyReshape);
+    glutKeyboardFunc(MyKeyboard);
+    glutSpecialFunc(MySpecialKey);
+    glutTimerFunc(100, MyTimer, 0);
 
     // Display user instructions in console window.
-    printf( "Press LEFT ARROW to move eye left.\n" );
-    printf( "Press RIGHT ARROW to move eye right.\n" );
-    printf( "Press DOWN ARROW to move eye down.\n" );
-    printf( "Press UP ARROW to move eye up.\n" );
-    printf( "Press PAGE UP to move closer.\n" );
-    printf( "Press PAGE DN to move further.\n" );
-    printf( "Press 'P' to toggle car animation.\n" );
-    printf( "Press 'W' to toggle wireframe.\n" );
-    printf( "Press 'X' to toggle axes.\n" );
-    printf( "Press 'R' to reset to initial view.\n" );
-    printf( "Press 'Q' to quit.\n\n" );
+    printf("Press LEFT ARROW to move eye left.\n");
+    printf("Press RIGHT ARROW to move eye right.\n");
+    printf("Press DOWN ARROW to move eye down.\n");
+    printf("Press UP ARROW to move eye up.\n");
+    printf("Press PAGE UP to move closer.\n");
+    printf("Press PAGE DN to move further.\n");
+    printf("Press 'P' to toggle car animation.\n");
+    printf("Press 'W' to toggle wireframe.\n");
+    printf("Press 'X' to toggle axes.\n");
+    printf("Press 'R' to reset to initial view.\n");
+    printf("Press 'Q' to quit.\n\n");
 
     // Enter GLUT event loop.
     glutMainLoop();
