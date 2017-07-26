@@ -1,6 +1,6 @@
 //============================================================
-// STUDENT NAME: 
-// NUS User ID.: 
+// STUDENT NAME: XU ZONGDI
+// NUS User ID.: t0915251
 // COMMENTS TO GRADER: 
 // 
 // 
@@ -77,6 +77,7 @@ const char ceilingTexFile[] = "images/ceiling.jpg";
 const char brickTexFile[] = "images/brick.jpg";
 const char checkerTexFile[] = "images/checker.png";
 const char spotsTexFile[] = "images/spots.png";
+const char somethingTexFile[] = "images/something.jpg";
 
 
 
@@ -110,6 +111,7 @@ GLuint ceilingTexObj;
 GLuint brickTexObj;
 GLuint checkerTexObj;
 GLuint spotsTexObj;
+GLuint somethingTexObj;
 
 // Others.
 bool drawAxes = true;           // Draw world coordinate frame axes iff true.
@@ -163,9 +165,6 @@ void MakeReflectionImage(void)
 	gluLookAt(eyePos[0], eyePos[1], 2 * TABLETOP_Z - eyePos[2], eyePos[0], eyePos[1], eyePos[2], 1.0, 0.0, 0.0);
 
 	//step 4
-	/*glEnable(GL_LIGHT0);
-	glEnable(GL_LIGHT1);
-	glEnable(GL_LIGHTING);*/
 	glLightfv(GL_LIGHT0, GL_POSITION, light0Position);
 	glLightfv(GL_LIGHT1, GL_POSITION, light1Position);
 
@@ -173,7 +172,7 @@ void MakeReflectionImage(void)
 	DrawRoom();
 	DrawTeapot();
 	DrawSphere();
-	DrawSomething();
+	DrawSomething(); //Object for task 2
 
 	//step 6
 	glReadBuffer(GL_BACK);
@@ -538,6 +537,27 @@ void SetUpTextureMaps(void)
 
 	DeallocateImageData(&imageData);
 
+	glGenTextures(1, &somethingTexObj);
+	glBindTexture(GL_TEXTURE_2D, somethingTexObj);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+
+	if (ReadImageFile(somethingTexFile, &imageData,
+		&imageWidth, &imageHeight, &numComponents) == 0) exit(1);
+	if (numComponents != 3)
+	{
+		fprintf(stderr, "Error: Texture image is not in RGB format.\n");
+		exit(1);
+	}
+
+	gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, imageWidth, imageHeight,
+		GL_RGB, GL_UNSIGNED_BYTE, imageData);
+
+	DeallocateImageData(&imageData);
+
 
 	// This texture object is for storing the reflection image read from the color buffer.
 
@@ -553,10 +573,14 @@ void SetUpTextureMaps(void)
 
 	glGenTextures(1, &reflectionTexObj);
 	glBindTexture(GL_TEXTURE_2D, reflectionTexObj);
-
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 
 	DeallocateImageData(&imageData);
+
 }
 
 
@@ -887,13 +911,13 @@ void DrawSphere(void)
 	glPopMatrix();
 }
 
-
+// Draw the self-defined object for task 2
 void DrawSomething(void)
 {
-	double radius = 0.3;
+	double len = 0.3;
 
 	GLfloat matAmbient[] = { 0.2, 0.5, 0.6, 1.0 };
-	GLfloat matDiffuse[] = { 0.2, 0.5, 0.6, 1.0 };
+	GLfloat matDiffuse[] = { 0.5, 0.8, 0.6, 1.0 };
 	GLfloat matSpecular[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat matShininess[] = { 128.0 };
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient);
@@ -901,18 +925,47 @@ void DrawSomething(void)
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, matShininess);
 
-	glBindTexture(GL_TEXTURE_2D, 0);  // Texture object ID == 0 means no texture mapping.
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+
+
+	glDisable(GL_CULL_FACE);  // Disable back-face culling.
+
+	glEnable(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, somethingTexObj);
 
 	glPushMatrix();
 	glTranslated(0.5, -0.8, 0.8 + TABLETOP_Z);
-	glRotated(90, 1, 0, 0);
-	glRotated(45, 0, 1, 0);
-	glutSolidCone(radius, 0.5, 32, 16);
-	glRotated(180, 1, 0, 0);
-	glutSolidCone(radius, 0.5, 32, 16);
-	glPopMatrix();
-}
+	glRotated(0, 0, 1, 0);
 
+	glRotated(45, 1, 0, 0);
+	//draw a tetrahedron
+	glBegin(GL_TRIANGLES);
+	glTexCoord2f(1.0, 0.0);glVertex3f(-len, len, 0.0);
+	glTexCoord2f(0.5, 1.0);glVertex3f(0.0, 0.0, len * 2);
+	glTexCoord2f(0.0, 0.0);glVertex3f(len, len, 0.0);
+	glTexCoord2f(1.0, 0.0);glVertex3f(-len, -len, 0.0);
+	glTexCoord2f(0.5, 1.0);glVertex3f(0.0, 0.0, len * 2);
+	glTexCoord2f(0.0, 0.0);glVertex3f(-len, len, 0.0);
+	glTexCoord2f(0.0, 0.0);glVertex3f(-len, -len, 0.0);
+	glTexCoord2f(0.5, 1.0);glVertex3f(0.0, 0.0, len * 2);
+	glTexCoord2f(1.0, 0.0);glVertex3f(len, -len, 0.0);
+	glTexCoord2f(0.0, 0.0);glVertex3f(len, -len, 0.0);
+	glTexCoord2f(0.5, 1.0);glVertex3f(0.0, 0.0, len * 2);
+	glTexCoord2f(1.0, 0.0);glVertex3f(len, len, 0.0);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glTexCoord2f(0.0, 0.0);glVertex3f(-len, -len, 0.0);
+	glTexCoord2f(0.0, 1.0);glVertex3f(-len, len, 0.0);
+	glTexCoord2f(1.0, 1.0);glVertex3f(len, len, 0.0);
+	glTexCoord2f(1.0, 0.0);glVertex3f(len, -len, 0.0);
+	glEnd();
+
+	glPopMatrix();
+
+	glEnable(GL_CULL_FACE);	// Enable back-face culling.
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // Draw the table.
